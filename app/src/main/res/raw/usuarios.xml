@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<usuarios>
+
+    <usuario>
+        <id>1</id>
+        <nombre>adrian</nombre>
+        <apellido>iglesia</apellido>
+        <user>adrian.iglesia</user>
+        <pass>adrian2019</pass>
+        <tipo>alumno</tipo>
+    </usuario>
+
+    <usuario>
+        <id>2</id>
+        <nombre>mariano</nombre>
+        <apellido>anino</apellido>
+        <user>mariano.anino</user>
+        <pass>mariano2019</pass>
+        <tipo>alumno</tipo>
+    </usuario>
+
+    <usuario>
+        <id>3</id>
+        <nombre>santiago</nombre>
+        <apellido>sambataro</apellido>
+        <user>santiago.samba</user>
+        <pass>samba2019</pass>
+        <tipo>alumno</tipo>
+    </usuario>
+
+    <usuario>
+        <id>4</id>
+        <nombre>erick</nombre>
+        <apellido>monste de oca</apellido>
+        <user>erick.montes</user>
+        <pass>erick2019</pass>
+        <tipo>alumno</tipo>
+    </usuario>
+
+    <usuario>
+        <id>5</id>
+        <nombre>facundo</nombre>
+        <apellido>bogado</apellido>
+        <user>facundo.bogado</user>
+        <pass>facu2019</pass>
+        <tipo>alumno</tipo>
+    </usuario>
+
+
+</usuarios>

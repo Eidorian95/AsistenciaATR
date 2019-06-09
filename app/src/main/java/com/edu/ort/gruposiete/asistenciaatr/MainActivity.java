@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ProfesorActivity.class );
                 startActivity(intent);
             }else{
-                Intent intent = new Intent(this, MateriasActivity.class );
+                Intent intent = new Intent(this, AlumnoActivity.class );
+                intent.putExtra("NAME",usuario.getNombre());
+                intent.putExtra("LASTNAME",usuario.getApellido());
                 startActivity(intent);
             }
 

@@ -11,7 +11,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView listView;
     private Button btLogin;
     private EditText user;
     private EditText pass;
@@ -24,18 +23,13 @@ public class MainActivity extends AppCompatActivity {
         user = (EditText) findViewById(R.id.edUsuario);
         pass = (EditText) findViewById(R.id.edPassword);
 
-        createListView();
+        btLogin.setOnClickListener(v -> {
+            pasarLogin(user.getText().toString(), pass.getText().toString());
+        });
 
-        pasarLogin(user.getText().toString(), pass.getText().toString());
 
     }
 
-
-    private void createListView() {
-        listView= (ListView) findViewById(R.id.lista);
-        Adaptador adaptador = new Adaptador(this, getArrayItems());
-        listView.setAdapter(adaptador);
-    }
 
     private ArrayList<Usuario> getArrayItems() {
         return XmlParser.Usuarios(this);
@@ -44,28 +38,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void pasarLogin(String user, String pass){
-        if(buscarUsuario(user,pass)){
-            Intent intent = new Intent(this, MateriasActivity.class );
-            startActivity(intent);
+        Usuario usuario = buscarUsuario(user,pass);
+        if(usuario != null){
+            if(usuario.getTipo().equals("profesor")){
+                Intent intent = new Intent(this, ProfesorActivity.class );
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(this, MateriasActivity.class );
+                startActivity(intent);
+            }
+
         }else{
-            Toast.makeText(this, "ERROR DE LOGIN VUELVA A INTENTAR", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "USUARIO O CONTRASEÑA INCORRECTOS", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private boolean buscarUsuario(String user, String pass){
+    private Usuario buscarUsuario(String user, String pass){
         int i =0;
-        boolean encontrado = false;
-        boolean  exito = false;
-        while(i < getArrayItems().size() || encontrado){
+        ArrayList<Usuario> usuarios = getArrayItems();
+        Usuario usuario = null;
 
-            if(getArrayItems().get(i).getUser().equals(user) && getArrayItems().get(i).getPass().equals(pass)){
-                exito = true;
-            }else{
-                i++;
+        while(i < usuarios.size() && usuario == null){
+            if(usuarios.get(i).getUser().equals(user) && usuarios.get(i).getPass().equals(pass)){
+                usuario = usuarios.get(i);
             }
+                i++;
         }
 
-        return exito;
+        return usuario;
     }
 }

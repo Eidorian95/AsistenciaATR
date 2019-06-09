@@ -45,6 +45,14 @@
         <pass>facu2019</pass>
         <tipo>alumno</tipo>
     </usuario>
+    <usuario>
+        <id>6</id>
+        <nombre>marco</nombre>
+        <apellido>cupo</apellido>
+        <user>cupo</user>
+        <pass>cupo</pass>
+        <tipo>profesor</tipo>
+    </usuario>
 
 
 </usuarios>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1033810341308",
+    "firebase_url": "https://asistenciaatr.firebaseio.com",
+    "project_id": "asistenciaatr",
+    "storage_bucket": "asistenciaatr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033810341308:android:3d011e579334747f",
+        "android_client_info": {
+          "package_name": "com.edu.ort.gruposiete.asistenciaatr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033810341308-fjvn9l9m8hoagrbcaqou9u98fdabmmao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXWrRMPQe6QZwQXoyFockibzA-VGSDhhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033810341308-fjvn9l9m8hoagrbcaqou9u98fdabmmao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

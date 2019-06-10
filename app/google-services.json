@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1033810341308-ls4cb7p9nnc29fmop4nge8o4s7l5ttep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.edu.ort.gruposiete.asistenciaatr",
+            "certificate_hash": "017272479624f551455b2b5dfeab3fcd24d67400"
+          }
+        },
+        {
           "client_id": "1033810341308-fjvn9l9m8hoagrbcaqou9u98fdabmmao.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,7 +1,7 @@
 package com.edu.ort.gruposiete.asistenciaatr;
 
 
-public class Usuario {
+public class Users {
 
     private String id;
     private String user;
@@ -10,13 +10,17 @@ public class Usuario {
     private String apellido;
     private String tipo;
 
-    public Usuario(String id, String user, String pass, String nombre, String apellido, String tipo) {
-        this.id = id;
-        this.user = user;
-        this.pass = pass;
-        this.nombre = nombre;
+    public Users() {
+
+    }
+
+    public Users(String user, String pass, String nombre, String apellido, String tipo) {
         this.apellido = apellido;
+        this.nombre = nombre;
+        this.pass = pass;
         this.tipo = tipo;
+        this.user = user;
+
     }
 
     public String getId() {

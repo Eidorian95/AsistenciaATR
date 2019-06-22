@@ -5,17 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 class Adaptador extends BaseAdapter {
-    private ArrayList<Usuario> list;
+    private ArrayList<Users> list;
     private Context context;
 
-    public Adaptador(Context context, ArrayList<Usuario> arrayItems) {
+    public Adaptador(Context context, ArrayList<Users> arrayItems) {
         this.context=context;
         this.list=arrayItems;
     }
@@ -40,7 +38,7 @@ class Adaptador extends BaseAdapter {
         view= LayoutInflater.from(context).inflate(R.layout.item_list,null);
         TextView nombre= (TextView) view.findViewById(R.id.nombre);
         TextView apellido = (TextView) view.findViewById(R.id.apellido);
-        Usuario item= (Usuario) getItem(i);
+        Users item= (Users) getItem(i);
         nombre.setText(item.getNombre());
         apellido.setText(item.getNombre());
         return view;

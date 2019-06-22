@@ -1,12 +1,18 @@
 package com.edu.ort.gruposiete.asistenciaatr;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -23,22 +29,46 @@ public class MainActivity extends AppCompatActivity {
         user = (EditText) findViewById(R.id.edUsuario);
         pass = (EditText) findViewById(R.id.edPassword);
 
+        /*
+        * HAY QUE HACER ESTO PRIMERO PARA HACER LA CONEXION CON FIREBASE
+        * CUANDO INICIA LA ACTIVITY Y YA GUARDAMOS LOS USUARIOS
+        *
+        *
+        *
+        * HAY QUE TENER EN CUENTA DL MODELO DE USUARIOS
+        * TIENE QUE ESTAR TAL CUAL ESTA EN FIREBASE
+        * YA LO CORREGI PERO PARA TENERLO ENCUENTA PARA MAS ADELANTE
+        * CUANDO AGREGUEMOS LAS MATERIAS
+        */
+        ArrayList<Users> usersItems = new ArrayList<>();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    Users user = ds.getValue(Users.class);
+                    usersItems.add(user);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         btLogin.setOnClickListener(v -> {
-            pasarLogin(user.getText().toString(), pass.getText().toString());
+            pasarLogin(usersItems, user.getText().toString(), pass.getText().toString());
         });
 
 
     }
 
 
-    private ArrayList<Usuario> getArrayItems() {
-        return XmlParser.Usuarios(this);
-
-    }
-
-
-    private void pasarLogin(String user, String pass){
-        Usuario usuario = buscarUsuario(user,pass);
+    private void pasarLogin(ArrayList<Users>lista, String user, String pass){
+        Users usuario = buscarUsuario(lista,user,pass);
         if(usuario != null){
             if(usuario.getTipo().equals("profesor")){
                 Intent intent = new Intent(this, ProfesorActivity.class );
@@ -56,18 +86,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Usuario buscarUsuario(String user, String pass){
-        int i =0;
-        ArrayList<Usuario> usuarios = getArrayItems();
-        Usuario usuario = null;
+    private Users buscarUsuario(ArrayList<Users> lista,String user, String pass){
 
-        while(i < usuarios.size() && usuario == null){
-            if(usuarios.get(i).getUser().equals(user) && usuarios.get(i).getPass().equals(pass)){
-                usuario = usuarios.get(i);
+        int i =0;
+
+        Users usuarioBuscado = null;
+
+        while(i < lista.size() && usuarioBuscado == null){
+            if(lista.get(i).getUser().equals(user) && lista.get(i).getPass().equals(pass)){
+                usuarioBuscado = lista.get(i);
             }
                 i++;
         }
 
-        return usuario;
+        return usuarioBuscado;
     }
 }

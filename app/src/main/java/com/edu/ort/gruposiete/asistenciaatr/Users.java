@@ -1,21 +1,25 @@
 package com.edu.ort.gruposiete.asistenciaatr;
 
 
+import java.util.ArrayList;
+
 public class Users {
 
     private String id;
+    private ArrayList<Materia> materias;
     private String user;
     private String pass;
     private String nombre;
     private String apellido;
-    private String tipo;
+    private boolean tipo;
 
     public Users() {
 
     }
 
-    public Users(String user, String pass, String nombre, String apellido, String tipo) {
+    public Users(String user, ArrayList<Materia>materias, String pass, String nombre, String apellido, boolean tipo) {
         this.apellido = apellido;
+        this.materias = materias;
         this.nombre = nombre;
         this.pass = pass;
         this.tipo = tipo;
@@ -63,11 +67,19 @@ public class Users {
         this.apellido = apellido;
     }
 
-    public String getTipo() {
+    public boolean getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(boolean tipo) {
         this.tipo = tipo;
+    }
+
+    public ArrayList<Materia> getMaterias() {
+        return materias;
+    }
+
+    public void setMaterias(ArrayList<Materia> materias) {
+        this.materias = materias;
     }
 }

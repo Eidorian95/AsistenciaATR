@@ -62,15 +62,13 @@ public class MainActivity extends AppCompatActivity {
         btLogin.setOnClickListener(v -> {
             pasarLogin(usersItems, user.getText().toString(), pass.getText().toString());
         });
-
-
     }
 
 
     private void pasarLogin(ArrayList<Users>lista, String user, String pass){
         Users usuario = buscarUsuario(lista,user,pass);
         if(usuario != null){
-            if(usuario.getTipo().equals("profesor")){
+            if(!usuario.getTipo()){
                 Intent intent = new Intent(this, ProfesorActivity.class );
                 startActivity(intent);
             }else{

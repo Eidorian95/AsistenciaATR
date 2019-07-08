@@ -9,22 +9,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MateriasRecyclerAdapter extends RecyclerView.Adapter<MateriasRecyclerAdapter.ViewHolderMaterias> {
+public class MateriasRecyclerAdapter extends RecyclerView.Adapter<MateriasRecyclerAdapter.ViewHolderMaterias> implements View.OnClickListener{
 
     private ArrayList<Materia> materias;
-    private MateriaClickListener listener;
+    private View.OnClickListener listener;
 
-
-    public MateriasRecyclerAdapter(ArrayList<Materia> materias, MateriaClickListener listener){
+    public MateriasRecyclerAdapter(ArrayList<Materia> materias){
         this.materias =  materias;
-        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolderMaterias onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.materias_template,viewGroup,false);
-
+        view.setOnClickListener(this);
         return new ViewHolderMaterias(view);
     }
 
@@ -40,21 +38,26 @@ public class MateriasRecyclerAdapter extends RecyclerView.Adapter<MateriasRecycl
         return materias.size();
     }
 
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(listener != null){
+            listener.onClick(v);
+        }
+    }
 
 
-    public class ViewHolderMaterias extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolderMaterias extends RecyclerView.ViewHolder{
 
         TextView nombreMateria;
 
         public ViewHolderMaterias(@NonNull View itemView) {
             super(itemView);
             nombreMateria = itemView.findViewById(R.id.tvMateriaNombre);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            listener.onClick(v, getAdapterPosition());
-        }
     }
 }

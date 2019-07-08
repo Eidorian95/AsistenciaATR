@@ -1,11 +1,14 @@
 package com.edu.ort.gruposiete.asistenciaatr;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class Users {
+public class Users implements Parcelable {
 
-    private String id;
+    private int id;
     private ArrayList<Materia> materias;
     private String user;
     private String pass;
@@ -17,8 +20,9 @@ public class Users {
 
     }
 
-    public Users(String user, ArrayList<Materia>materias, String pass, String nombre, String apellido, boolean tipo) {
+    public Users(String user, int id,  ArrayList<Materia>materias, String pass, String nombre, String apellido, boolean tipo) {
         this.apellido = apellido;
+        this.id = id;
         this.materias = materias;
         this.nombre = nombre;
         this.pass = pass;
@@ -27,11 +31,32 @@ public class Users {
 
     }
 
-    public String getId() {
+    protected Users(Parcel in) {
+        id = Integer.parseInt(in.readString());
+        user = in.readString();
+        pass = in.readString();
+        nombre = in.readString();
+        apellido = in.readString();
+        tipo = in.readByte() != 0;
+    }
+
+    public static final Creator<Users> CREATOR = new Creator<Users>() {
+        @Override
+        public Users createFromParcel(Parcel in) {
+            return new Users(in);
+        }
+
+        @Override
+        public Users[] newArray(int size) {
+            return new Users[size];
+        }
+    };
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -81,5 +106,20 @@ public class Users {
 
     public void setMaterias(ArrayList<Materia> materias) {
         this.materias = materias;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(String.valueOf(id));
+        dest.writeString(user);
+        dest.writeString(pass);
+        dest.writeString(nombre);
+        dest.writeString(apellido);
+        dest.writeByte((byte) (tipo ? 1 : 0));
     }
 }

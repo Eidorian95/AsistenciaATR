@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btLogin;
     private EditText user;
     private EditText pass;
+    private static String MATERIAS = "MATERIAS";
+    private static String USUARIO = "USUARIO";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }else{
                 Intent intent = new Intent(this, MateriasActivity.class );
-                intent.putExtra("USUARIO", usuario);
-                intent.putParcelableArrayListExtra("MATERIAS", usuario.getMaterias());
+                intent.putExtra(USUARIO, usuario);
+                intent.putParcelableArrayListExtra(MATERIAS, usuario.getMaterias());
                 startActivity(intent);
             }
 

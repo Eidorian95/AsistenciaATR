@@ -5,5 +5,12 @@
     <string name="ingrese_usuario">Ingrese su usuario</string>
     <string name="titulo_pass">Contraseña</string>
     <string name="ingrese_pass">Ingrese su contraseña</string>
+    <string name="nombre_materia">NOMBRE DE LA MATERIA</string>
+    <string name="fichar_asistencia">Fichar asistencia</string>
+    <string name="scanner_qr">Scanear QR</string>
+    <string name="mis_asistencias">Mis asistencias</string>
     <string name="bt_login">Login</string>
+    <string name="materias">Materias:</string>
+    <string name="alumno">Alumno:</string>
+    <string name="error_materias">No existen materias</string>
 </resources>

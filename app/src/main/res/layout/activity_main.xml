@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginTop="16dp"
-            android:text="@string/bt_login" />
+            android:text="@string/bt_login"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

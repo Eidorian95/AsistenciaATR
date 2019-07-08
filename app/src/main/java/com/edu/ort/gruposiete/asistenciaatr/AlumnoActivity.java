@@ -13,24 +13,28 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class AlumnoActivity extends AppCompatActivity {
 
+    private int id_materia;
+    private String nom_materia;
+    private static String LASTNAME = "LASTNAME";
+    private static String ID_MATERIA = "ID_MATERIA";
+    private static String NOM_MATERIA = "NOM_MATERIA";
     Button btScannearQr;
     TextView tvAsistenciaAlumno;
+    TextView tvNomMateria;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alumno);
         setViews();
 
+        nom_materia = getIntent().getStringExtra(NOM_MATERIA);
+       // id_materia =  Integer.parseInt(getIntent().getStringExtra(ID_MATERIA));
+        tvNomMateria.setText(nom_materia.toUpperCase());
 
-        getIntent().getStringExtra("LASTNAME");
-
+        getIntent().getStringExtra(LASTNAME);
         btScannearQr.setOnClickListener(v ->{
-
             iniciarScanner();
-
         });
-
-
 
     }
 
@@ -66,5 +70,6 @@ public class AlumnoActivity extends AppCompatActivity {
     private void setViews(){
         btScannearQr = findViewById(R.id.btScannerQr);
         tvAsistenciaAlumno = findViewById(R.id.tvAsistenciaAlumno);
+        tvNomMateria = findViewById(R.id.tvMateria);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ public class AlumnoActivity extends AppCompatActivity {
     private static String LASTNAME = "LASTNAME";
     private static String ID_MATERIA = "ID_MATERIA";
     private static String NOM_MATERIA = "NOM_MATERIA";
+    private static String USUARIO = "USUARIO";
+    private Users alumno;
     Button btScannearQr;
     TextView tvAsistenciaAlumno;
     TextView tvNomMateria;
@@ -35,6 +38,7 @@ public class AlumnoActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
 
+        alumno = getIntent().getParcelableExtra(USUARIO);
         nom_materia = getIntent().getStringExtra(NOM_MATERIA);
         id_materia = getIntent().getIntExtra(ID_MATERIA,0);
         tvNomMateria.setText(nom_materia.toUpperCase());
@@ -83,7 +87,7 @@ public class AlumnoActivity extends AppCompatActivity {
     }
 
     private void setAsistenciaOk(int idMateria, String fecha){
-
+        String key =  String.valueOf(alumno.getId());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -91,8 +95,7 @@ public class AlumnoActivity extends AppCompatActivity {
                     Users user = postSnapshot.getValue(Users.class);
                     if(user.getTipo()==false && user.getMaterias().get(0).getId() == idMateria){
 
-                        DatabaseReference fechaRef = postSnapshot.getRef().child("materias/0/asistencias/"+fecha);
-                        fechaRef.push().setValue(user);
+                        myRef.child("0/materias/0/asistencias/"+fecha).child(key).setValue(alumno);
                     }
                     break;
                 }

@@ -14,7 +14,7 @@ public class MateriasActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private MateriasRecyclerAdapter adapter;
-    private Users usuario;
+    private Users alumno;
     private static String MATERIAS = "MATERIAS";
     private static String USUARIO = "USUARIO";
     private static String ID_MATERIA = "ID_MATERIA";
@@ -31,11 +31,11 @@ public class MateriasActivity extends AppCompatActivity {
         //HAY QUE HACER QUE LOS IBJETS IMPLEMENTEN PARCELEABLE
 
 
-            usuario = getIntent().getParcelableExtra(USUARIO);
-            tvAlumno.setText(usuario.getNombre().toUpperCase()+" "+usuario.getApellido().toUpperCase());
+            alumno = getIntent().getParcelableExtra(USUARIO);
+            tvAlumno.setText(alumno.getNombre().toUpperCase()+" "+ alumno.getApellido().toUpperCase());
 
             if (getIntent().hasExtra(MATERIAS)){
-                usuario.setMaterias(getIntent().getParcelableArrayListExtra(MATERIAS));
+                alumno.setMaterias(getIntent().getParcelableArrayListExtra(MATERIAS));
 
                 setRecyclerView();
             }else{
@@ -45,7 +45,7 @@ public class MateriasActivity extends AppCompatActivity {
 
     private void setRecyclerView(){
         layoutManager = new LinearLayoutManager(getApplicationContext());
-        adapter = new MateriasRecyclerAdapter(usuario.getMaterias());
+        adapter = new MateriasRecyclerAdapter(alumno.getMaterias());
 
         //llamo al listener del adaptador
         //se puede dejar asi o pasarlo al lambda
@@ -57,11 +57,12 @@ public class MateriasActivity extends AppCompatActivity {
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toast.makeText(getApplicationContext(),"ID: "+ usuario.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getId()+", NOMBRE: "+usuario.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getNombre(),Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(),"ID: "+ alumno.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getId()+", NOMBRE: "+alumno.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getNombre(),Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), AlumnoActivity.class);
-                intent.putExtra(ID_MATERIA, usuario.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getId());
-                intent.putExtra(NOM_MATERIA, usuario.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getNombre());
+                intent.putExtra(ID_MATERIA, alumno.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getId());
+                intent.putExtra(NOM_MATERIA, alumno.getMaterias().get(recyclerView.getChildAdapterPosition(v)).getNombre());
+                intent.putExtra(USUARIO,alumno);
                 startActivity(intent);
             }
         });

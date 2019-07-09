@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.edu.ort.gruposiete.asistenciaatr.adapters.MateriasRecyclerAdapter;
+
 public class MateriasActivity extends AppCompatActivity {
     private TextView tvAlumno;
     private RecyclerView recyclerView;

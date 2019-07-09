@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-class Materia implements Parcelable {
+public class Materia implements Parcelable {
 
     private String nombre;
     private int id;

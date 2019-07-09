@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,17 +21,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AlumnoActivity extends AppCompatActivity {
-    private DatabaseReference myRef;
-    private int id_materia;
-    private String nom_materia;
     private static String LASTNAME = "LASTNAME";
     private static String ID_MATERIA = "ID_MATERIA";
     private static String NOM_MATERIA = "NOM_MATERIA";
     private static String USUARIO = "USUARIO";
+
+    private DatabaseReference myRef;
+    private int id_materia;
+    private String nom_materia;
     private Users alumno;
-    Button btScannearQr;
-    TextView tvAsistenciaAlumno;
-    TextView tvNomMateria;
+
+
+    private Button btScannearQr;
+  //  private FirebaseRecyclerAdapter adapter;
+    private TextView tvNomMateria;
+    private RecyclerView recyclerAsistencia;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,24 +90,34 @@ public class AlumnoActivity extends AppCompatActivity {
 
     private void setViews(){
         btScannearQr = findViewById(R.id.btScannerQr);
-        tvAsistenciaAlumno = findViewById(R.id.tvAsistenciaAlumno);
         tvNomMateria = findViewById(R.id.tvMateria);
+        recyclerAsistencia = findViewById(R.id.asistenciasRecycler);
     }
 
     private void setAsistenciaOk(int idMateria, String fecha){
         String key =  String.valueOf(alumno.getId());
+        String keyMateriaId = String.valueOf(id_materia);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     Users user = postSnapshot.getValue(Users.class);
                     if(user.getTipo()==false && user.getMaterias().get(0).getId() == idMateria){
+
                         Map<String, String> u = new HashMap<>();
                         u.put("id",String.valueOf(alumno.getId()));
                         u.put("alumno",alumno.getApellido());
                         myRef.child("0/materias/0/asistencias/"+fecha).child(key).setValue(u);
                     }
                     break;
+                }
+
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    Users alu = postSnapshot.getValue(Users.class);
+                    if(alu.getId() == alumno.getId()){
+                        myRef.child(alumno.getId()+"/materias/"+id_materia+"/asistencias").child(fecha).setValue(fecha);
+                    }
+
                 }
             }
 

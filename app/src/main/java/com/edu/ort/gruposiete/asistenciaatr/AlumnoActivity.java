@@ -17,6 +17,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AlumnoActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     private int id_materia;
@@ -94,8 +97,10 @@ public class AlumnoActivity extends AppCompatActivity {
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     Users user = postSnapshot.getValue(Users.class);
                     if(user.getTipo()==false && user.getMaterias().get(0).getId() == idMateria){
-
-                        myRef.child("0/materias/0/asistencias/"+fecha).child(key).setValue(alumno);
+                        Map<String, String> u = new HashMap<>();
+                        u.put("id",String.valueOf(alumno.getId()));
+                        u.put("alumno",alumno.getApellido());
+                        myRef.child("0/materias/0/asistencias/"+fecha).child(key).setValue(u);
                     }
                     break;
                 }

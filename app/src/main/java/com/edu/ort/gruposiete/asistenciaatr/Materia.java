@@ -9,7 +9,7 @@ class Materia implements Parcelable {
 
     private String nombre;
     private int id;
-    private ArrayList<Asistencia> asistencias;
+    //private ArrayList<Asistencia> asistencias;
 
     public Materia() {
     }
@@ -19,11 +19,7 @@ class Materia implements Parcelable {
         this.id = id;
     }
 
-    public Materia(String nombre, int id, ArrayList<Asistencia> asistencias) {
-        this.nombre = nombre;
-        this.id = id;
-        this.asistencias = asistencias;
-    }
+
 
     protected Materia(Parcel in) {
         nombre = in.readString();
@@ -58,13 +54,6 @@ class Materia implements Parcelable {
         this.id = id;
     }
 
-    public ArrayList<Asistencia> getAsistencias() {
-        return asistencias;
-    }
-
-    public void setAsistencias(ArrayList<Asistencia> asistencias) {
-        this.asistencias = asistencias;
-    }
 
     @Override
     public int describeContents() {

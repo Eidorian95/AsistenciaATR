@@ -20,7 +20,7 @@ public class Users implements Parcelable {
 
     }
 
-    public Users(String user, int id,  ArrayList<Materia>materias, String pass, String nombre, String apellido, boolean tipo) {
+    public Users(String user, int id, ArrayList<Materia> materias, String pass, String nombre, String apellido, boolean tipo) {
         this.apellido = apellido;
         this.id = id;
         this.materias = materias;

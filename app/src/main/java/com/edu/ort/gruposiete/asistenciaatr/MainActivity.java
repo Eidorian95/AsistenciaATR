@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText pass;
     private static String MATERIAS = "MATERIAS";
     private static String USUARIO = "USUARIO";
-    private  List<Users> usersItems;
+    private  ArrayList<Users> usersItems;
 
 
     @Override
@@ -46,17 +46,17 @@ public class MainActivity extends AppCompatActivity {
         * CUANDO AGREGUEMOS LAS MATERIAS
         */
 
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
         myRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                usersItems = new ArrayList<Users>();
-
+                usersItems = new ArrayList<>();
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
-                    usersItems.add(ds.getValue(Users.class));
+                    Users u = ds.getValue(Users.class);
+                    usersItems.add(u);
+
                 }
             }
             @Override
@@ -73,17 +73,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void pasarLogin(List<Users>lista, String user, String pass){
+    private void pasarLogin(ArrayList<Users>lista, String user, String pass){
         Users usuario = buscarUsuario(lista,user,pass);
         if(usuario != null){
             if(!usuario.getTipo()){
                 Intent intent = new Intent(this, ProfesorActivity.class );
+                intent.putExtra(USUARIO, usuario);
+                intent.putParcelableArrayListExtra(MATERIAS, usuario.getMaterias());
                 startActivity(intent);
+                finish();
             }else{
                 Intent intent = new Intent(this, MateriasActivity.class );
                 intent.putExtra(USUARIO, usuario);
                 intent.putParcelableArrayListExtra(MATERIAS, usuario.getMaterias());
                 startActivity(intent);
+                finish();
             }
 
         }else{
@@ -92,10 +96,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Users buscarUsuario(List<Users> lista,String user, String pass){
+    private Users buscarUsuario(ArrayList<Users> lista,String user, String pass){
 
         int i =0;
-
         Users usuarioBuscado = null;
 
         while(i < lista.size() && usuarioBuscado == null){
@@ -104,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
             }
                 i++;
         }
-
         return usuarioBuscado;
     }
 }

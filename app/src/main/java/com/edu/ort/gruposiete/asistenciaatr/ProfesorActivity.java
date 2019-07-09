@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -15,6 +17,12 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class ProfesorActivity extends AppCompatActivity {
+
+    private static String MATERIAS = "MATERIAS";
+    private static String USUARIO = "USUARIO";
+    private Users profesor;
+    private DatabaseReference myRef;
+
 
     EditText edFecha;
     Button btGen;
@@ -26,19 +34,24 @@ public class ProfesorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profesor);
         setViews();
 
-            btGen.setOnClickListener(v->{
+        profesor = getIntent().getParcelableExtra(USUARIO);
+        profesor.setMaterias(getIntent().getParcelableArrayListExtra(MATERIAS));
 
-                String fecha = edFecha.getText().toString().trim();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
 
-                if(!fecha.equals("")){
+        btGen.setOnClickListener(v->{
+
+            String fecha = edFecha.getText().toString().trim();
+
+            if(!fecha.equals("")){
                     generateQr(fecha);
+                    setNuevaFecha(fecha);
                 }else{
                     Toast.makeText(this, "Ingrese la fecha para generar el codigo QR", Toast.LENGTH_SHORT).show();
-                }
+            }
 
-            });
-
-
+        });
 
     }
 
@@ -62,5 +75,9 @@ public class ProfesorActivity extends AppCompatActivity {
         }catch (WriterException e){
             e.printStackTrace();
         }
+    }
+
+    private void setNuevaFecha(String fecha){
+        myRef.child("users").child("0").child("materias").child("0").child("asistencias").child(fecha).push().setValue(fecha);
     }
 }

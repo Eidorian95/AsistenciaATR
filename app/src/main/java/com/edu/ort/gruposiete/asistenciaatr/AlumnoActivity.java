@@ -36,7 +36,7 @@ public class AlumnoActivity extends AppCompatActivity {
         myRef = database.getReference("users");
 
         nom_materia = getIntent().getStringExtra(NOM_MATERIA);
-        id_materia =  Integer.parseInt(getIntent().getStringExtra(ID_MATERIA));
+        id_materia = getIntent().getIntExtra(ID_MATERIA,0);
         tvNomMateria.setText(nom_materia.toUpperCase());
 
         getIntent().getStringExtra(LASTNAME);
@@ -91,9 +91,10 @@ public class AlumnoActivity extends AppCompatActivity {
                     Users user = postSnapshot.getValue(Users.class);
                     if(user.getTipo()==false && user.getMaterias().get(0).getId() == idMateria){
 
-                        DatabaseReference fechaRef = postSnapshot.getRef().child(fecha);
-                        fechaRef.setValue(user.getNombre());
+                        DatabaseReference fechaRef = postSnapshot.getRef().child("materias/0/asistencias/"+fecha);
+                        fechaRef.push().setValue(user);
                     }
+                    break;
                 }
             }
 

@@ -8,11 +8,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class AlumnoActivity extends AppCompatActivity {
-
+    private DatabaseReference myRef;
     private int id_materia;
     private String nom_materia;
     private static String LASTNAME = "LASTNAME";
@@ -27,8 +32,11 @@ public class AlumnoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alumno);
         setViews();
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("users");
+
         nom_materia = getIntent().getStringExtra(NOM_MATERIA);
-       // id_materia =  Integer.parseInt(getIntent().getStringExtra(ID_MATERIA));
+        id_materia =  Integer.parseInt(getIntent().getStringExtra(ID_MATERIA));
         tvNomMateria.setText(nom_materia.toUpperCase());
 
         getIntent().getStringExtra(LASTNAME);
@@ -58,9 +66,10 @@ public class AlumnoActivity extends AppCompatActivity {
                 Toast.makeText(this,"Cancelaste el scanneo",Toast.LENGTH_SHORT).show();
 
             }else{
-                Toast.makeText(this,result.getContents(),Toast.LENGTH_SHORT).show();
-                tvAsistenciaAlumno.setText(result.getContents()+" - "+getIntent().getStringExtra("NAME")+ getIntent().getStringExtra("LASTNAME")+" - PRESENTE");
+//                Toast.makeText(this,result.getContents(),Toast.LENGTH_SHORT).show();
+//                tvAsistenciaAlumno.setText(result.getContents()+" - "+getIntent().getStringExtra("NAME")+ getIntent().getStringExtra("LASTNAME")+" - PRESENTE");
 
+                setAsistenciaOk(id_materia,result.getContents());
             }
         }else{
             super.onActivityResult(requestCode,resultCode,data);
@@ -71,5 +80,28 @@ public class AlumnoActivity extends AppCompatActivity {
         btScannearQr = findViewById(R.id.btScannerQr);
         tvAsistenciaAlumno = findViewById(R.id.tvAsistenciaAlumno);
         tvNomMateria = findViewById(R.id.tvMateria);
+    }
+
+    private void setAsistenciaOk(int idMateria, String fecha){
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    Users user = postSnapshot.getValue(Users.class);
+                    if(user.getTipo()==false && user.getMaterias().get(0).getId() == idMateria){
+
+                        DatabaseReference fechaRef = postSnapshot.getRef().child(fecha);
+                        fechaRef.setValue(user.getNombre());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

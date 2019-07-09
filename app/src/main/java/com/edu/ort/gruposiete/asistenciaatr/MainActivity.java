@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button btLogin;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText pass;
     private static String MATERIAS = "MATERIAS";
     private static String USUARIO = "USUARIO";
+    private  List<Users> usersItems;
 
 
     @Override
@@ -43,16 +45,18 @@ public class MainActivity extends AppCompatActivity {
         * YA LO CORREGI PERO PARA TENERLO ENCUENTA PARA MAS ADELANTE
         * CUANDO AGREGUEMOS LAS MATERIAS
         */
-        ArrayList<Users> usersItems = new ArrayList<>();
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
+
         myRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersItems = new ArrayList<Users>();
+
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
-                    Users user = ds.getValue(Users.class);
-                    usersItems.add(user);
+                    usersItems.add(ds.getValue(Users.class));
                 }
             }
             @Override
@@ -62,13 +66,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         btLogin.setOnClickListener(v -> {
             pasarLogin(usersItems, user.getText().toString(), pass.getText().toString());
         });
     }
 
 
-    private void pasarLogin(ArrayList<Users>lista, String user, String pass){
+    private void pasarLogin(List<Users>lista, String user, String pass){
         Users usuario = buscarUsuario(lista,user,pass);
         if(usuario != null){
             if(!usuario.getTipo()){
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Users buscarUsuario(ArrayList<Users> lista,String user, String pass){
+    private Users buscarUsuario(List<Users> lista,String user, String pass){
 
         int i =0;
 

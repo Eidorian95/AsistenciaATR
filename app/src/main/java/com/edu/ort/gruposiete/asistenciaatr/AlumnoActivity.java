@@ -1,14 +1,19 @@
 package com.edu.ort.gruposiete.asistenciaatr;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.edu.ort.gruposiete.asistenciaatr.adapters.AlumnoAsisteciaAdapter;
+import com.edu.ort.gruposiete.asistenciaatr.adapters.MateriasRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,15 +33,18 @@ public class AlumnoActivity extends AppCompatActivity {
     private static String USUARIO = "USUARIO";
 
     private DatabaseReference myRef;
+    private FirebaseDatabase database;
     private int id_materia;
     private String nom_materia;
     private Users alumno;
+    private ArrayList<Asistencia> asistencias;
 
 
     private Button btScannearQr;
-  //  private FirebaseRecyclerAdapter adapter;
     private TextView tvNomMateria;
-    private RecyclerView recyclerAsistencia;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private AlumnoAsisteciaAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +52,7 @@ public class AlumnoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alumno);
         setViews();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
 
         alumno = getIntent().getParcelableExtra(USUARIO);
@@ -56,6 +65,9 @@ public class AlumnoActivity extends AppCompatActivity {
             iniciarScanner();
         });
 
+        asistencias = getAsistenciasFirebase(alumno.getId(),id_materia);
+
+        //setRecyclerView(asistencias);
     }
 
     private void iniciarScanner() {
@@ -82,6 +94,7 @@ public class AlumnoActivity extends AppCompatActivity {
 //                tvAsistenciaAlumno.setText(result.getContents()+" - "+getIntent().getStringExtra("NAME")+ getIntent().getStringExtra("LASTNAME")+" - PRESENTE");
 
                 setAsistenciaOk(id_materia,result.getContents());
+
             }
         }else{
             super.onActivityResult(requestCode,resultCode,data);
@@ -91,7 +104,7 @@ public class AlumnoActivity extends AppCompatActivity {
     private void setViews(){
         btScannearQr = findViewById(R.id.btScannerQr);
         tvNomMateria = findViewById(R.id.tvMateria);
-        recyclerAsistencia = findViewById(R.id.asistenciasRecycler);
+        recyclerView = findViewById(R.id.asistenciasRecycler);
     }
 
     private void setAsistenciaOk(int idMateria, String fecha){
@@ -108,16 +121,12 @@ public class AlumnoActivity extends AppCompatActivity {
                         u.put("id",String.valueOf(alumno.getId()));
                         u.put("alumno",alumno.getApellido());
                         myRef.child("0/materias/0/asistencias/"+fecha).child(key).setValue(u);
+
+                        Map<String, String> a = new HashMap<>();
+                        a.put("fecha",fecha);
+                        myRef.child(alumno.getId()+"/materias/"+id_materia+"/asistencias").child(fecha).setValue(a);
                     }
                     break;
-                }
-
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    Users alu = postSnapshot.getValue(Users.class);
-                    if(alu.getId() == alumno.getId()){
-                        myRef.child(alumno.getId()+"/materias/"+id_materia+"/asistencias").child(fecha).setValue(fecha);
-                    }
-
                 }
             }
 
@@ -126,6 +135,45 @@ public class AlumnoActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private ArrayList<Asistencia> getAsistenciasFirebase(int idAlu, int idMateria){
+
+        ArrayList<Asistencia> asist = new ArrayList<>();
+        DatabaseReference asistenciasRef = database.getReference("users").child(String.valueOf(idAlu)).child("materias").child(String.valueOf(idMateria)).child("asistencias");
+
+        asistenciasRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Asistencia a = ds.getValue(Asistencia.class);
+                    asist.add(a);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return asist;
+    }
+
+
+    private void setRecyclerView(ArrayList<Asistencia> mAsistencias){
+
+        layoutManager = new LinearLayoutManager(getApplicationContext());
+        adapter = new AlumnoAsisteciaAdapter(mAsistencias);
+
+        //llamo al listener del adaptador
+        //se puede dejar asi o pasarlo al lambda
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
     }
 }

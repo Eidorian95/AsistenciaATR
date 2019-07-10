@@ -133,6 +133,7 @@ public class AlumnoActivity extends AppCompatActivity {
                     }
                     break;
                 }
+                setAsistenciaRecycler(alumno.getId(),idMateria);
             }
 
             @Override

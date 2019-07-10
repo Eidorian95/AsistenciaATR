@@ -52,6 +52,12 @@ public class AlumnoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alumno);
         setViews();
 
+        //VILLERADA
+        asistencias = new ArrayList<>();
+        layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
 
@@ -65,9 +71,8 @@ public class AlumnoActivity extends AppCompatActivity {
             iniciarScanner();
         });
 
-        asistencias = getAsistenciasFirebase(alumno.getId(),id_materia);
 
-        //setRecyclerView(asistencias);
+        setAsistenciaRecycler(alumno.getId(),id_materia);
     }
 
     private void iniciarScanner() {
@@ -138,9 +143,8 @@ public class AlumnoActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<Asistencia> getAsistenciasFirebase(int idAlu, int idMateria){
+    private void setAsistenciaRecycler(int idAlu, int idMateria){
 
-        ArrayList<Asistencia> asist = new ArrayList<>();
         DatabaseReference asistenciasRef = database.getReference("users").child(String.valueOf(idAlu)).child("materias").child(String.valueOf(idMateria)).child("asistencias");
 
         asistenciasRef.addValueEventListener(new ValueEventListener() {
@@ -149,8 +153,10 @@ public class AlumnoActivity extends AppCompatActivity {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Asistencia a = ds.getValue(Asistencia.class);
-                    asist.add(a);
+                    asistencias.add(a);
                 }
+                adapter = new AlumnoAsisteciaAdapter(asistencias);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -159,21 +165,12 @@ public class AlumnoActivity extends AppCompatActivity {
             }
         });
 
-        return asist;
     }
 
 
     private void setRecyclerView(ArrayList<Asistencia> mAsistencias){
 
-        layoutManager = new LinearLayoutManager(getApplicationContext());
-        adapter = new AlumnoAsisteciaAdapter(mAsistencias);
 
-        //llamo al listener del adaptador
-        //se puede dejar asi o pasarlo al lambda
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
 
     }
 }

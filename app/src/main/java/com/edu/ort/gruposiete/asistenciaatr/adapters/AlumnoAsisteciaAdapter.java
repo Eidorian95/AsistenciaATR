@@ -38,7 +38,7 @@ public class AlumnoAsisteciaAdapter  extends RecyclerView.Adapter<AlumnoAsisteci
 
     @Override
     public int getItemCount() {
-        return 0;
+        return asistencias.size();
     }
 
 

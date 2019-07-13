@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         user = (EditText) findViewById(R.id.edUsuario);
         pass = (EditText) findViewById(R.id.edPassword);
 
+        user.setText("adrian.iglesia");
+        pass.setText("adr123");
+
         /*
         * HAY QUE HACER ESTO PRIMERO PARA HACER LA CONEXION CON FIREBASE
         * CUANDO INICIA LA ACTIVITY Y YA GUARDAMOS LOS USUARIOS

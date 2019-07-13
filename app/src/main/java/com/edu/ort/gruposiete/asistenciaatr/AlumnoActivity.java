@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.edu.ort.gruposiete.asistenciaatr.adapters.AlumnoAsisteciaAdapter;
 import com.edu.ort.gruposiete.asistenciaatr.adapters.MateriasRecyclerAdapter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +39,7 @@ public class AlumnoActivity extends AppCompatActivity {
     private String nom_materia;
     private Users alumno;
     private ArrayList<Asistencia> asistencias;
+    private boolean asistio = false;
 
 
     private Button btScannearQr;
@@ -57,6 +59,8 @@ public class AlumnoActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+        adapter = new AlumnoAsisteciaAdapter(asistencias);
+        recyclerView.setAdapter(adapter);
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
@@ -93,14 +97,10 @@ public class AlumnoActivity extends AppCompatActivity {
         if(result != null){
             if(result.getContents()==null){
                 Toast.makeText(this,"Cancelaste el scanneo",Toast.LENGTH_SHORT).show();
-
             }else{
-//                Toast.makeText(this,result.getContents(),Toast.LENGTH_SHORT).show();
-//                tvAsistenciaAlumno.setText(result.getContents()+" - "+getIntent().getStringExtra("NAME")+ getIntent().getStringExtra("LASTNAME")+" - PRESENTE");
-
                 setAsistenciaOk(id_materia,result.getContents());
-
             }
+
         }else{
             super.onActivityResult(requestCode,resultCode,data);
         }
@@ -112,28 +112,41 @@ public class AlumnoActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.asistenciasRecycler);
     }
 
-    private void setAsistenciaOk(int idMateria, String fecha){
-        String key =  String.valueOf(alumno.getId());
-        String keyMateriaId = String.valueOf(id_materia);
+    private void setAsistenciaOk(int idMateriaAlumno, String fecha){
+
+        String[]split = fecha.split("-");
+        String fecha_split = split[0];
+        String id_split = split[1];
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    Users user = postSnapshot.getValue(Users.class);
-                    if(user.getTipo()==false && user.getMaterias().get(0).getId() == idMateria){
+                    Users profesor = postSnapshot.getValue(Users.class);
+                    if(profesor.getTipo()==false){
+                        if(id_split.equals(String.valueOf(profesor.getMaterias().get(0).getId()))){
+                            if(id_split.equals(String.valueOf(idMateriaAlumno))){
+                                Map<String, String> u = new HashMap<>();
+                                u.put("id", String.valueOf(alumno.getId()));
+                                u.put("alumno", alumno.getApellido());
+                                myRef.child(profesor.getId() +"/materias/"+0+"/asistencias/"+fecha_split).child(String.valueOf(alumno.getId())).setValue(u);
 
-                        Map<String, String> u = new HashMap<>();
-                        u.put("id",String.valueOf(alumno.getId()));
-                        u.put("alumno",alumno.getApellido());
-                        myRef.child("0/materias/0/asistencias/"+fecha).child(key).setValue(u);
 
-                        Map<String, String> a = new HashMap<>();
-                        a.put("fecha",fecha);
-                        myRef.child(alumno.getId()+"/materias/"+id_materia+"/asistencias").child(fecha).setValue(a);
+                                Map<String, String> a = new HashMap<>();
+                                a.put("fecha", fecha_split);
+                                myRef.child(alumno.getId() + "/materias/"+idMateriaAlumno+"/asistencias").child(fecha_split).setValue(a);
+
+                            }else{
+                                Toast.makeText(getApplicationContext(),"No coinciden las materias",Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
-                    break;
+
                 }
-                setAsistenciaRecycler(alumno.getId(),idMateria);
+
+                    setAsistenciaRecycler(alumno.getId(),idMateriaAlumno);
+
             }
 
             @Override
@@ -147,31 +160,27 @@ public class AlumnoActivity extends AppCompatActivity {
     private void setAsistenciaRecycler(int idAlu, int idMateria){
 
         DatabaseReference asistenciasRef = database.getReference("users").child(String.valueOf(idAlu)).child("materias").child(String.valueOf(idMateria)).child("asistencias");
-
         asistenciasRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                asistencias.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Asistencia a = ds.getValue(Asistencia.class);
                     asistencias.add(a);
+                    adapter.notifyDataSetChanged();
                 }
-                adapter = new AlumnoAsisteciaAdapter(asistencias);
-                recyclerView.setAdapter(adapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
     }
 
 
-    private void setRecyclerView(ArrayList<Asistencia> mAsistencias){
-
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

@@ -16,6 +16,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfesorActivity extends AppCompatActivity {
 
     private static String MATERIAS = "MATERIAS";
@@ -45,7 +48,7 @@ public class ProfesorActivity extends AppCompatActivity {
             String fecha = edFecha.getText().toString().trim();
 
             if(!fecha.equals("")){
-                    generateQr(fecha);
+                    generateQr(fecha+"-"+profesor.getMaterias().get(0).getId());
                     setNuevaFecha(fecha);
                 }else{
                     Toast.makeText(this, "Ingrese la fecha para generar el codigo QR", Toast.LENGTH_SHORT).show();
@@ -66,6 +69,8 @@ public class ProfesorActivity extends AppCompatActivity {
 
         MultiFormatWriter mfW = new MultiFormatWriter();
 
+        Map<String, String> u = new HashMap<>();
+        u.put("id","123");
         try{
             BitMatrix bitMatrix = mfW.encode(fecha, BarcodeFormat.QR_CODE, 200,200);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
@@ -78,6 +83,12 @@ public class ProfesorActivity extends AppCompatActivity {
     }
 
     private void setNuevaFecha(String fecha){
-        myRef.child("users").child("0").child("materias").child("0").child("asistencias").child(fecha).push().setValue(fecha);
+        myRef.child("users").child(String.valueOf(profesor.getId())).child("materias").child("0").child("asistencias").child(fecha).push().setValue(fecha);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

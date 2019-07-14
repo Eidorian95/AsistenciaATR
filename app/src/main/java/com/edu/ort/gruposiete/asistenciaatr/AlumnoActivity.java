@@ -38,7 +38,7 @@ public class AlumnoActivity extends AppCompatActivity {
     private int id_materia;
     private String nom_materia;
     private Users alumno;
-    private ArrayList<Asistencia> asistencias;
+    private ArrayList<String> asistencias;
     private boolean asistio = false;
 
 
@@ -127,15 +127,16 @@ public class AlumnoActivity extends AppCompatActivity {
                     if(profesor.getTipo()==false){
                         if(id_split.equals(String.valueOf(profesor.getMaterias().get(0).getId()))){
                             if(id_split.equals(String.valueOf(idMateriaAlumno))){
+                                /*
                                 Map<String, String> u = new HashMap<>();
                                 u.put("id", String.valueOf(alumno.getId()));
                                 u.put("alumno", alumno.getApellido());
                                 myRef.child(profesor.getId() +"/materias/"+0+"/asistencias/"+fecha_split).child(String.valueOf(alumno.getId())).setValue(u);
+                                */
 
-
-                                Map<String, String> a = new HashMap<>();
-                                a.put("fecha", fecha_split);
-                                myRef.child(alumno.getId() + "/materias/"+idMateriaAlumno+"/asistencias").child(fecha_split).setValue(a);
+                                //Map<String, String> a = new HashMap<>();
+                                //a.put("fecha", fecha_split);
+                                myRef.child(alumno.getId() + "/materias/"+idMateriaAlumno+"/asistencias").push().setValue(fecha_split);
 
                             }else{
                                 Toast.makeText(getApplicationContext(),"No coinciden las materias",Toast.LENGTH_SHORT).show();
@@ -165,7 +166,7 @@ public class AlumnoActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 asistencias.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Asistencia a = ds.getValue(Asistencia.class);
+                    String a = ds.getValue(String.class);
                     asistencias.add(a);
                     adapter.notifyDataSetChanged();
                 }

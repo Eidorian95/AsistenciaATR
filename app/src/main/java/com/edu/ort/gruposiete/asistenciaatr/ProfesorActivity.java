@@ -62,7 +62,6 @@ public class ProfesorActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference().child("users");
         recyclerView = findViewById(R.id.recyclerPresentes);
-        myRef = database.getReference();
 
         DatePickerDialog.OnDateSetListener date = (view, anio, mes, dia) -> {
             calendario.set(Calendar.YEAR, anio);
@@ -82,11 +81,19 @@ public class ProfesorActivity extends AppCompatActivity {
             String fecha = edFecha.getText().toString().trim();
 
             if(fecha.length() > 0){
-                    generateQr(fecha+"-"+profesor.getMaterias().get(0).getId());
-                    setNuevaFecha(fecha);
-                    setRecyclerView(fecha);
-                }else{
-                    Toast.makeText(this, "Ingrese la fecha para generar el codigo QR", Toast.LENGTH_SHORT).show();
+                if(fecha.contains("/")){
+                    String[] split = fecha.split("/");
+                    split[split.length-1] = "20" + split[split.length-1];
+                    fecha = "";
+                    for(String s : split){
+                        fecha += s;
+                    }
+                }
+                generateQr(fecha+"-"+profesor.getMaterias().get(0).getId());
+                //setNuevaFecha(fecha);
+                setRecyclerView(fecha);
+            }else{
+                Toast.makeText(this, "Ingrese la fecha para generar el codigo QR", Toast.LENGTH_SHORT).show();
             }
 
         });

@@ -34,20 +34,7 @@ public class MainActivity extends AppCompatActivity {
         user = (EditText) findViewById(R.id.edUsuario);
         pass = (EditText) findViewById(R.id.edPassword);
 
-        user.setText("adrian.iglesia");
-        pass.setText("adr123");
-
-        /*
-        * HAY QUE HACER ESTO PRIMERO PARA HACER LA CONEXION CON FIREBASE
-        * CUANDO INICIA LA ACTIVITY Y YA GUARDAMOS LOS USUARIOS
-        *
-        *
-        *
-        * HAY QUE TENER EN CUENTA DL MODELO DE USUARIOS
-        * TIENE QUE ESTAR TAL CUAL ESTA EN FIREBASE
-        * YA LO CORREGI PERO PARA TENERLO ENCUENTA PARA MAS ADELANTE
-        * CUANDO AGREGUEMOS LAS MATERIAS
-        */
+        btLogin.setEnabled(false);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
@@ -61,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
                     usersItems.add(u);
 
                 }
+                btLogin.setEnabled(true);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
 
 
         btLogin.setOnClickListener(v -> {

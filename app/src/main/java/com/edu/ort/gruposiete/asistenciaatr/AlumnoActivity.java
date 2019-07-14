@@ -116,45 +116,10 @@ public class AlumnoActivity extends AppCompatActivity {
 
         String[]split = fecha.split("-");
         String fecha_split = split[0];
-        String id_split = split[1];
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        myRef.child(alumno.getId() + "/materias/"+idMateriaAlumno+"/asistencias").push().setValue(fecha_split);
 
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    Users profesor = postSnapshot.getValue(Users.class);
-                    if(profesor.getTipo()==false){
-                        if(id_split.equals(String.valueOf(profesor.getMaterias().get(0).getId()))){
-                            if(id_split.equals(String.valueOf(idMateriaAlumno))){
-                                /*
-                                Map<String, String> u = new HashMap<>();
-                                u.put("id", String.valueOf(alumno.getId()));
-                                u.put("alumno", alumno.getApellido());
-                                myRef.child(profesor.getId() +"/materias/"+0+"/asistencias/"+fecha_split).child(String.valueOf(alumno.getId())).setValue(u);
-                                */
-
-                                //Map<String, String> a = new HashMap<>();
-                                //a.put("fecha", fecha_split);
-                                myRef.child(alumno.getId() + "/materias/"+idMateriaAlumno+"/asistencias").push().setValue(fecha_split);
-
-                            }else{
-                                Toast.makeText(getApplicationContext(),"No coinciden las materias",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                }
-
-                    setAsistenciaRecycler(alumno.getId(),idMateriaAlumno);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        setAsistenciaRecycler(alumno.getId(),idMateriaAlumno);
 
     }
 

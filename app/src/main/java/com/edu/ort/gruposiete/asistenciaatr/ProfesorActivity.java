@@ -30,7 +30,6 @@ public class ProfesorActivity extends AppCompatActivity {
     private Users profesor;
     private DatabaseReference myRef;
 
-
     EditText edFecha;
     Button btGen;
     ImageView ivQrGen;

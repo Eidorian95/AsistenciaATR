@@ -8,36 +8,37 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.edu.ort.gruposiete.asistenciaatr.R;
+import com.edu.ort.gruposiete.asistenciaatr.Users;
 
 import java.util.ArrayList;
 
-public class AlumnoAsisteciaAdapter  extends RecyclerView.Adapter<AlumnoAsisteciaAdapter.ViewHolderAsistenciasAlu>{
+public class ProfesorAlumnoAdapter extends RecyclerView.Adapter<ProfesorAlumnoAdapter.ViewHolderAsistenciasAlu>{
 
 
-    private ArrayList<String> asistencias;
+    private ArrayList<Users> alumnos;
 
-    public AlumnoAsisteciaAdapter(ArrayList<String> asistencias){
-        this.asistencias = asistencias;
+    public ProfesorAlumnoAdapter(ArrayList<Users> asistencias){
+        this.alumnos = asistencias;
     }
 
     @NonNull
     @Override
     public ViewHolderAsistenciasAlu onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.alumnos_asistencias_template,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.profesor_alumno_template,viewGroup,false);
 
         return new ViewHolderAsistenciasAlu(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderAsistenciasAlu viewHolderAsistenciasAlu, int i) {
-        String asis = asistencias.get(i);
-
-        viewHolderAsistenciasAlu.fechaAsistencia.setText(asis);
+        Users asis = alumnos.get(i);
+        String nombreAMostrar = asis.getNombre() + " " + asis.getApellido();
+        viewHolderAsistenciasAlu.fechaAsistencia.setText(nombreAMostrar);
     }
 
     @Override
     public int getItemCount() {
-        return asistencias.size();
+        return alumnos.size();
     }
 
 

@@ -4,12 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 
 public class Materia implements Parcelable {
 
     private String nombre;
     private int id;
-    //private ArrayList<Asistencia> asistencias;
+    private Map<String, String> asistencias;
 
     public Materia() {
     }
@@ -18,8 +20,6 @@ public class Materia implements Parcelable {
         this.nombre = nombre;
         this.id = id;
     }
-
-
 
     protected Materia(Parcel in) {
         nombre = in.readString();
@@ -54,6 +54,13 @@ public class Materia implements Parcelable {
         this.id = id;
     }
 
+    public Map<String, String> getAsistencias() {
+        return asistencias;
+    }
+
+    public void setAsistencias(Map<String, String> asistencias) {
+        this.asistencias = asistencias;
+    }
 
     @Override
     public int describeContents() {
@@ -65,4 +72,14 @@ public class Materia implements Parcelable {
         dest.writeString(nombre);
         dest.writeInt(id);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Materia materia = (Materia) o;
+        return id == materia.id &&
+                Objects.equals(nombre, materia.nombre);
+    }
+
 }

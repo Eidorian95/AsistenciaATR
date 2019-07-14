@@ -1,5 +1,6 @@
 package com.edu.ort.gruposiete.asistenciaatr;
 
+import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,10 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ProfesorActivity extends AppCompatActivity {
@@ -40,6 +44,7 @@ public class ProfesorActivity extends AppCompatActivity {
     EditText edFecha;
     Button btGen;
     ImageView ivQrGen;
+    Calendar calendario = Calendar.getInstance();
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -57,6 +62,22 @@ public class ProfesorActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference().child("users");
         recyclerView = findViewById(R.id.recyclerPresentes);
+        myRef = database.getReference();
+
+        DatePickerDialog.OnDateSetListener date = (view, anio, mes, dia) -> {
+            calendario.set(Calendar.YEAR, anio);
+            calendario.set(Calendar.MONTH, mes);
+            calendario.set(Calendar.DAY_OF_MONTH, dia);
+            String myFormat = "dd/MM/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+            edFecha.setText(sdf.format(calendario.getTime()));
+        };
+
+        edFecha.setOnClickListener(v -> new DatePickerDialog(ProfesorActivity.this, date, calendario
+                .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
+                calendario.get(Calendar.DAY_OF_MONTH)).show());
+
         btGen.setOnClickListener(v->{
             String fecha = edFecha.getText().toString().trim();
 

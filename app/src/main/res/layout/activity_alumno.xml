@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".AlumnoActivity">
 
+
+
+
     <TextView
         android:id="@+id/tvMateria"
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
@@ -42,6 +45,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
 
     <TextView
         android:id="@+id/textView3"

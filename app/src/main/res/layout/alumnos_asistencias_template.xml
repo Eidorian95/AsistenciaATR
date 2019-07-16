@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="FECHA:"
+            android:text="@string/fecha"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="24sp" />
 
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="09-07-2019"
+            android:text="@string/fecha_patron"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="24sp" />
     </LinearLayout>

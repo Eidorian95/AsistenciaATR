@@ -13,4 +13,10 @@
     <string name="materias">Materias:</string>
     <string name="alumno">Alumno:</string>
     <string name="error_materias">No existen materias</string>
+    <string name="boton_generar">Generar:</string>
+    <string name="presentes">Presentes:</string>
+    <string name="fecha">Fecha: </string>
+    <string name="fecha_patron">09-07-2019</string>
+    <string name="mat">Base de datos</string>
+    <string name="format">Formato DD-MM-AAAA</string>
 </resources>
